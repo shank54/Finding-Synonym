@@ -1,5 +1,5 @@
 import math
-
+from random import randint
 #computes the cosine of two vectors
 def cosine_formula(vec1, vec2):
     prod,one,two = 0,0,0
@@ -69,7 +69,7 @@ def build_semantic_descriptors(sentences):
 def similar_word(word,choices,semantic_descriptor):
 	result_words = []
 	if word not in semantic_descriptor:
-		return "Sorry... Currently I can't find meaning of this word"
+		return choices[randint(0,3)]
 	else:
 		word_predictor = semantic_descriptor[word]
 	
@@ -83,12 +83,16 @@ def similar_word(word,choices,semantic_descriptor):
 					result_words.append(w)
 	answer = ""
 	max_points = -1
-
+	count = 0
 	for c in choices:
+		count += 1
 		if c not in semantic_descriptor:
-			return "Sorry... Currently I can't find meaning of this word"
-		option_desc = semantic_descriptor[c]
-		point = cosine_formula(word_predictor,option_desc)
+			if count<len(choices)-1:
+				point = -1
+				continue
+		else:
+			option_desc = semantic_descriptor[c]
+			point = cosine_formula(word_predictor,option_desc)
 		if point>max_points:
 			max_points = point
 			answer = c
